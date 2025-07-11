@@ -21,9 +21,6 @@ import sys.thread.Thread;
 
 using StringTools;
 
-// import ZipUtils; ZipUtils.uncompressZip(ZipUtils.openZip("E:\\Desktop\\test\\termination lua.ycemod"), "E:\\Desktop\\test\\uncompressed\\");
-// import ZipUtils; var e = ZipUtils.createZipFile("file.ycemod"); ZipUtils.writeFolderToZip(e, "./mods/Friday Night Funkin'/", "Friday Night Funkin'/"); e.flush(); e.close();
-
 class ZipUtil {
 	public static var bannedNames:Array<String> = [".git", ".gitignore", ".github", ".vscode", ".gitattributes", "readme.txt"];
 
@@ -129,11 +126,15 @@ class ZipUtil {
 		@param zip ZIP file to write to
 		@param path Folder path
 		@param prefix (Additional) allows you to set a prefix in the zip itself.
+		@param list (Additional) allows you to specify a list of folders to whitelist..
+		@param useWhitelist (Additional) allows you to specify if the list should be treated as a whitelist or blacklist.
 	**/
-	public static function writeFolderToZip(zip:ZipWriter, path:String, ?prefix:String, ?prog:ZipProgress, ?whitelist:Array<String>):ZipProgress {
-		if (prefix == null) prefix = "";
-		if (whitelist == null) whitelist = [];
+	public static function writeFolderToZip(zip:ZipWriter, path:String, prefix:String = "", ?prog:ZipProgress, ?list:Array<String>, ?useWhitelist:Bool):ZipProgress {
+		if (list == null) list = [];
+		if (useWhitelist == null) useWhitelist = true;
 		if (prog == null) prog = new ZipProgress();
+
+		trace('whitelst: $useWhitelist | list: ${list}');
 
 		try {
 			var curPath:Array<String> = [path];
@@ -147,16 +148,19 @@ class ZipUtil {
 
 			var files:Array<StrNameLabel> = [];
 
-			var doFolder:Void->Void = null;
-			(doFolder = function() {
+			var doFolder:Int->Void = null;
+			(doFolder = function(depth:Int) {
 				var path = curPath.join("/");
 				var zipPath = destPath.join("/");
 				for(e in FileSystem.readDirectory(path)) {
-					if (bannedNames.contains(e.toLowerCase()) && !whitelist.contains(e.toLowerCase())) continue;
+					
+					if (bannedNames.contains(e.toLowerCase())) continue;
+					if (depth == 0 && list.contains(e.toLowerCase()) != useWhitelist) continue;
+
 					if (FileSystem.isDirectory('$path/$e')) {
 						// is directory, so loop into that function again
 						for(p in [curPath, destPath]) p.push(e);
-						doFolder();
+						doFolder(depth + 1);
 						for(p in [curPath, destPath]) p.pop();
 					} else {
 						// is file, put it in the list
@@ -165,7 +169,7 @@ class ZipUtil {
 						files.push(new StrNameLabel('$path/$e', zipPath));
 					}
 				}
-			})();
+			})(0);
 
 			prog.fileCount = files.length;
 			for(k=>file in files) {
@@ -193,10 +197,10 @@ class ZipUtil {
 		return prog;
 	}
 
-	public static function writeFolderToZipAsync(zip:ZipWriter, path:String, ?prefix:String):ZipProgress {
+	public static function writeFolderToZipAsync(zip:ZipWriter, path:String, ?prefix:String, ?list:Array<String>, ?useWhitelist:Bool = true):ZipProgress {
 		var zipProg = new ZipProgress();
 		Thread.create(function() {
-			writeFolderToZip(zip, path, prefix, zipProg);
+			writeFolderToZip(zip, path, prefix, zipProg, list, useWhitelist);
 		});
 		return zipProg;
 	}
