@@ -386,7 +386,6 @@ class CoolUtil
 		if (FlxG.sound.music == null || !FlxG.sound.music.playing)
 		{
 			playMusic(Paths.music('freakyMenu'), true, fadeIn ? 0 : 1, true, 102);
-			FlxG.sound.music.persist = true;
 			if (fadeIn)
 				FlxG.sound.music.fadeIn(4, 0, 0.7);
 		}
@@ -416,21 +415,26 @@ class CoolUtil
 	 */
 	@:noUsing public static function playMusic(path:String, Persist:Bool = false, Volume:Float = 1, Looped:Bool = true, DefaultBPM:Float = 102, ?Group:FlxSoundGroup) {
 		Conductor.reset();
-		FlxG.sound.playMusic(path, Volume, Looped, Group);
-		if (FlxG.sound.music != null) {
-			FlxG.sound.music.persist = Persist;
-		}
+		if (FlxG.sound.music == null) FlxG.sound.music = new FlxSound();
+		else if (FlxG.sound.music.active) FlxG.sound.music.stop();
+		FlxG.sound.music.loadEmbedded(path, Looped);
+		FlxG.sound.music.volume = Volume;
+		FlxG.sound.music.persist = Persist;
+		FlxG.sound.defaultMusicGroup.add(FlxG.sound.music);
 
 		var infoPath = '${Path.withoutExtension(path)}.ini';
 		if (Assets.exists(infoPath)) {
 			var musicInfo = IniUtil.parseAsset(infoPath, [
 				"BPM" => null,
 				"TimeSignature" => Flags.DEFAULT_BEATS_PER_MEASURE + "/" + Flags.DEFAULT_STEPS_PER_BEAT,
-				"LoopTime" => '${Flags.DEFAULT_LOOP_TIME}'
+				"LoopTime" => '${Flags.DEFAULT_LOOP_TIME}',
+				"EndTime" => null,
+				"Offset" => '0'
 			]);
 
-			if (FlxG.sound.music != null)
-				FlxG.sound.music.loopTime = Std.parseFloat(musicInfo["LoopTime"]) * 1000;
+			FlxG.sound.music.loopTime = Std.parseFloat(musicInfo["LoopTime"]) * 1000;
+			if (musicInfo["EndTime"] != null) FlxG.sound.music.endTime = Std.parseFloat(musicInfo["EndTime"]) * 1000;
+			FlxG.sound.music.offset = Std.parseFloat(musicInfo["Offset"]) * 1000;
 
 			var timeSignParsed:Array<Null<Float>> = musicInfo["TimeSignature"] == null ? [] : [for(s in musicInfo["TimeSignature"].split("/")) Std.parseFloat(s)];
 			var beatsPerMeasure:Float = Flags.DEFAULT_BEATS_PER_MEASURE;
@@ -446,6 +450,8 @@ class CoolUtil
 			Conductor.changeBPM(bpm, beatsPerMeasure, stepsPerBeat);
 		} else
 			Conductor.changeBPM(DefaultBPM);
+
+		FlxG.sound.music.play();
 	}
 
 	/**
@@ -812,10 +818,12 @@ class CoolUtil
 	 * @param music Music
 	 */
 	public static inline function setMusic(frontEnd:SoundFrontEnd, music:FlxSound) {
-		if (frontEnd.music != null)
-			@:privateAccess frontEnd.destroySound(frontEnd.music);
+		if (frontEnd.music == music) return;
+
+		if (frontEnd.music != null) @:privateAccess frontEnd.destroySound(frontEnd.music);
 		frontEnd.list.remove(music);
-		frontEnd.music = music;
+		frontEnd.defaultMusicGroup.add(frontEnd.music = music);
+		music.persist = true;
 	}
 
 	/**

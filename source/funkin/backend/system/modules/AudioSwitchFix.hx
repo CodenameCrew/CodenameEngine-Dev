@@ -4,6 +4,8 @@ import flixel.FlxState;
 import flixel.sound.FlxSound;
 import funkin.backend.utils.NativeAPI;
 import lime.media.AudioManager;
+import lime.media.AudioSource;
+import haxe.Timer;
 
 /**
  * if you are stealing this keep this comment at least please lol
@@ -12,58 +14,40 @@ import lime.media.AudioManager;
  */
 @:dox(hide)
 class AudioSwitchFix {
-	@:noCompletion
-	private static function onStateSwitch(state:FlxState):Void {
-		#if windows
-			if (Main.audioDisconnected) {
+	public static function onAudioDisconnected() @:privateAccess {
+		var soundList:Array<FlxSound> = [FlxG.sound.music];
+		for (sound in FlxG.sound.list) if (sound.playing) soundList.push(sound);
+		for (source in AudioSource.activeSources) source.dispose();
 
-				var playingList:Array<PlayingSound> = [];
-				for(e in FlxG.sound.list) {
-					if (e.playing) {
-						playingList.push({
-							sound: e,
-							time: e.time
-						});
-						e.stop();
-					}
-				}
-				if (FlxG.sound.music != null)
-					FlxG.sound.music.stop();
+		AudioManager.shutdown();
 
-				AudioManager.shutdown();
-				AudioManager.init();
-				// #if !lime_doc_gen
-				// if (AudioManager.context.type == OPENAL)
-				// {
-				// 	var alc = AudioManager.context.openal;
+		AudioManager.init();
+		Main.changeID++;
+		// #if !lime_doc_gen
+		// if (AudioManager.context.type == OPENAL)
+		// {
+		// 	var alc = AudioManager.context.openal;
 
-				// 	var device = alc.openDevice();
-				// 	var ctx = alc.createContext(device);
-				// 	alc.makeContextCurrent(ctx);
-				// 	alc.processContext(ctx);
-				// }
-				// #end
-				Main.changeID++;
+		// 	var device = alc.openDevice();
+		// 	var ctx = alc.createContext(device);
+		// 	alc.makeContextCurrent(ctx);
+		// 	alc.processContext(ctx);
+		// }
+		// #end
 
-				for(e in playingList) {
-					e.sound.play(e.time);
-				}
+		for (sound in soundList) {
+			sound._paused = true;
+			sound.resume();
+		}
 
-				Main.audioDisconnected = false;
-			}
-		#end
+		Main.audioDisconnected = false;
 	}
 
+	private static var timer:Timer;
+
+	private static function onRun() if (Main.audioDisconnected) onAudioDisconnected();
 	public static function init() {
-		#if windows
 		NativeAPI.registerAudio();
-		FlxG.signals.preStateCreate.add(onStateSwitch);
-		#end
+		if (timer == null) (timer = new Timer(1000)).run = onRun;
 	}
-}
-
-@:dox(hide)
-typedef PlayingSound = {
-	var sound:FlxSound;
-	var time:Float;
 }

@@ -509,7 +509,7 @@ class PlayState extends MusicBeatState
 	@:noCompletion @:dox(hide) private var _endSongCalled:Bool = false;
 
 	@:dox(hide)
-	var __vocalOffsetViolation:Float = 0;
+	var __vocalSyncTimer:Float = 0;
 
 	private function get_accuracy():Float {
 		if (accuracyPressedNotes <= 0) return -1;
@@ -999,25 +999,10 @@ class PlayState extends MusicBeatState
 
 		inst.onComplete = endSong;
 
-		if (!paused) {
-			FlxG.sound.setMusic(inst);
-			FlxG.sound.music.play();
-		}
-		vocals.play();
-
-		vocals.pause();
-		inst.pause();
-		for (strumLine in strumLines.members) {
-			strumLine.vocals.play();
-			strumLine.vocals.pause();
-		}
-		inst.time = vocals.time = (chartingMode && Charter.startHere) ? Charter.startTime : 0;
-		for (strumLine in strumLines.members) {
-			strumLine.vocals.time = vocals.time;
-			strumLine.vocals.play();
-		}
-		vocals.play();
-		inst.play();
+		var time = (chartingMode && Charter.startHere) ? Charter.startTime : 0;
+		for (strumLine in strumLines.members) strumLine.vocals.play(true, time);
+		vocals.play(true, time);
+		inst.play(true, time);
 
 		updateDiscordPresence();
 
@@ -1028,15 +1013,14 @@ class PlayState extends MusicBeatState
 		scripts.call("destroy");
 		for(g in __cachedGraphics)
 			g.useCount--;
-		@:privateAccess
-			for (strumLine in strumLines.members)
-				FlxG.sound.destroySound(strumLine.vocals);
-		super.destroy();
-		scripts = FlxDestroyUtil.destroy(scripts);
 		@:privateAccess {
-			FlxG.sound.destroySound(inst);
+			for (strumLine in strumLines.members) FlxG.sound.destroySound(strumLine.vocals);
+			if (FlxG.sound.music != inst) FlxG.sound.destroySound(inst);
 			FlxG.sound.destroySound(vocals);
 		}
+		scripts = FlxDestroyUtil.destroy(scripts);
+
+		super.destroy();
 
 		WindowUtils.resetAffixes();
 		SaveWarning.reset();
@@ -1079,15 +1063,14 @@ class PlayState extends MusicBeatState
 		curSong = songData.meta.name.toLowerCase();
 		curSongID = curSong.replace(" ", "-");
 
-		inst = FlxG.sound.load(Paths.inst(SONG.meta.name, difficulty));
+		FlxG.sound.setMusic(inst = FlxG.sound.load(Assets.getMusic(Paths.inst(SONG.meta.name, difficulty))));
 		if (SONG.meta.needsVoices != false && Assets.exists(Paths.voices(SONG.meta.name, difficulty))) // null or true
-			vocals = FlxG.sound.load(Paths.voices(SONG.meta.name, difficulty));
+			vocals = FlxG.sound.load(Options.streamedVocals ? Assets.getMusic(Paths.voices(SONG.meta.name, difficulty)) : Paths.voices(SONG.meta.name, difficulty));
 		else
 			vocals = new FlxSound();
-		inst.group = FlxG.sound.defaultMusicGroup;
-		vocals.group = FlxG.sound.defaultMusicGroup;
 
-		inst.persist = vocals.persist = false;
+		vocals.group = FlxG.sound.defaultMusicGroup;
+		vocals.persist = false;
 
 		generatedMusic = true;
 	}
@@ -1188,17 +1171,11 @@ class PlayState extends MusicBeatState
 	@:dox(hide)
 	function resyncVocals():Void
 	{
-		vocals.pause();
-		for (strumLine in strumLines.members) strumLine.vocals.pause();
+		var time = Conductor.songPosition + Conductor.songOffset;
+		for (strumLine in strumLines.members) strumLine.vocals.play(true, time);
+		vocals.play(true, time);
+		inst.play(true, time);
 
-		FlxG.sound.music.play();
-		Conductor.songPosition = FlxG.sound.music.time;
-		vocals.time = Conductor.songPosition + Conductor.songOffset;
-		for (strumLine in strumLines.members) {
-			strumLine.vocals.time = vocals.time;
-			strumLine.vocals.play();
-		}
-		vocals.play();
 		gameAndCharsCall("onVocalsResync");
 	}
 
@@ -1333,22 +1310,19 @@ class PlayState extends MusicBeatState
 				if (Conductor.songPosition >= 0)
 					startSong();
 			}
-		} else if (FlxG.sound.music != null) {
-			var instTime = FlxG.sound.music.time;
-			var isOffsync:Bool = vocals.time != instTime;
-			if(!isOffsync) {
-				for(strumLine in strumLines.members) {
-					if(strumLine.vocals.time != instTime) {
-						isOffsync = true;
-						break;
-					}
+		}
+		else if (FlxG.sound.music != null && (__vocalSyncTimer -= elapsed) < 0) {
+			__vocalSyncTimer = 1;
+
+			var instTime = FlxG.sound.music.getActualTime();
+			var isOffsync:Bool = vocals.loaded && Math.abs(instTime - vocals.getActualTime()) > 30;
+			if (!isOffsync) {
+				for (strumLine in strumLines.members) {
+					if ((isOffsync = strumLine.vocals.loaded && Math.abs(instTime - strumLine.vocals.getActualTime()) > 30)) break;
 				}
 			}
-			__vocalOffsetViolation = Math.max(0, __vocalOffsetViolation + (isOffsync ? elapsed : -elapsed / 2));
-			if (__vocalOffsetViolation > Flags.VOCAL_OFFSET_VIOLATION_THRESHOLD) {
-				resyncVocals();
-				__vocalOffsetViolation = 0;
-			}
+
+			if (isOffsync) resyncVocals();
 		}
 
 		while(events.length > 0 && events.last().time <= Conductor.songPosition)

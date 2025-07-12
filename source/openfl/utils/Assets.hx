@@ -243,16 +243,16 @@ class Assets
 
 	public static function getMusic(id:String, useCache:Bool = true):Sound
 	{
-		#if (lime_vorbis && lime > "7.9.0")
-		var path = getPath(id);
-		// TODO: What if it is a WAV or non-Vorbis file?
-		var vorbisFile = VorbisFile.fromFile(path);
-		var buffer = AudioBuffer.fromVorbisFile(vorbisFile);
-		return Sound.fromAudioBuffer(buffer);
-		#else
-		// TODO: Streaming sound
-		return getSound(id, useCache);
+		#if (lime_vorbis && lime > "7.9.0" && !macro)
+		if (Options.streamedMusic) {
+			var path = getPath(id);
+			// TODO: What if it is a WAV or non-Vorbis file?
+			var vorbisFile = VorbisFile.fromFile(path);
+			var buffer = AudioBuffer.fromVorbisFile(vorbisFile);
+			return Sound.fromAudioBuffer(buffer);
+		}
 		#end
+		return getSound(id, useCache);
 	}
 
 	/**

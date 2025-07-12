@@ -599,17 +599,6 @@ class Sound extends EventDispatcher
 		#end
 	}
 
-	var changeID:Int = 0;
-	public function regen() {
-		var audioBuffer = new AudioBuffer();
-		audioBuffer.bitsPerSample = __buffer.bitsPerSample;
-		audioBuffer.channels = __buffer.channels;
-		audioBuffer.data = __buffer.data;
-		audioBuffer.sampleRate = __buffer.sampleRate;
-
-		__buffer = audioBuffer;
-	}
-
 	/**
 		Generates a new SoundChannel object to play back the sound. This method
 		returns a SoundChannel object, which you access to stop the sound and to
@@ -635,13 +624,6 @@ class Sound extends EventDispatcher
 		{
 			return null;
 		}
-
-		#if !macro
-		if (changeID < funkin.backend.system.Main.changeID) {
-			changeID = funkin.backend.system.Main.changeID;
-			regen();
-		}
-		#end
 
 		if (sndTransform == null)
 		{

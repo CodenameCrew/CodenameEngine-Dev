@@ -616,22 +616,17 @@ class Charter extends UIState {
 		updateWaveforms();
 	}
 
-	inline function isSoundLoaded(sound:FlxSound) {
-		@:privateAccess
-		return sound != null && sound._sound != null && sound._sound.length > 0;
-	}
-
 	public function updateWaveforms() {
 		var wavesToGenerate:Array<{name:String, sound:FlxSound}> = [];
 
-		if(isSoundLoaded(FlxG.sound.music))
+		if (FlxG.sound.music.loaded)
 			wavesToGenerate.push({name: "Inst.ogg", sound: FlxG.sound.music});
 
-		if (PlayState.SONG.meta.needsVoices != false && isSoundLoaded(vocals))
+		if (PlayState.SONG.meta.needsVoices != false && vocals.loaded)
 			wavesToGenerate.push({name: "Voices.ogg", sound: vocals});
 
 		for (strumLine in strumLines)
-			if (strumLine.vocals != null && strumLine.strumLine.vocalsSuffix != null && strumLine.strumLine.vocalsSuffix != "" && isSoundLoaded(strumLine.vocals))
+			if (strumLine.vocals != null && strumLine.strumLine.vocalsSuffix != null && strumLine.strumLine.vocalsSuffix != "" && strumLine.vocals.loaded)
 				wavesToGenerate.push({
 					name: 'Voices${strumLine.strumLine.vocalsSuffix}.ogg',
 					sound: strumLine.vocals
@@ -1575,12 +1570,10 @@ class Charter extends UIState {
 			vocals.pause();
 			for (strumLine in strumLines.members) strumLine.vocals.pause();
 		} else {
-			FlxG.sound.music.play();
-			vocals.play();
-			vocals.time = FlxG.sound.music.time = Conductor.songPosition + Conductor.songOffset * 2;
+			FlxG.sound.music.play(Conductor.songPosition + Conductor.songOffset);
+			vocals.play(FlxG.sound.music.getActualTime());
 			for (strumLine in strumLines.members) {
-				strumLine.vocals.play();
-				strumLine.vocals.time = vocals.time;
+				strumLine.vocals.play(FlxG.sound.music.getActualTime());
 			}
 		}
 	}
