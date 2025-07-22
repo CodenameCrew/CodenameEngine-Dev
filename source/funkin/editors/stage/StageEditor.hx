@@ -532,6 +532,7 @@ class StageEditor extends UIState {
 		sprite.extra.set(exID("parentNode"), stage.stageXML.x);
 		sprite.extra.set(exID("highMemory"), false);
 		sprite.extra.set(exID("lowMemory"), false);
+		sprite.antialiasing = true;
 		xmlMap.set(sprite, node);
 
 		var button:StageSpriteButton = new StageSpriteButton(0, 0, sprite, node);
