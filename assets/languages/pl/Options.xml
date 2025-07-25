@@ -11,7 +11,7 @@
 		<str id="optionsTree.controls-desc">Zmień klawisze dla Gracza 1 i Gracza 2!</str>
 
 		<str id="optionsTree.gameplay-name">Rozgrywka</str>
-		<str id="optionsTree.gameplay-desc">Zmień ustawienia rozgrywki takie jak Dolne Przewijanie, Prędkość Przewijania, Niegrzeczność...</str>
+		<str id="optionsTree.gameplay-desc">Zmień ustawienia rozgrywki takie jak Przewijanie w dół, Prędkość Przewijania, Niegrzeczność...</str>
 		<str id="optionsTree.gameplay.advanced-desc">Zmień bardziej zaawansowane opcje takie jak Rorzmiar Okna, Strumieniowanie Audio...</str>
 
 		<str id="optionsTree.appearance-name">Wygląd</str>
@@ -72,12 +72,12 @@
 		<str id="week6PixelPerfect-desc">Jeśli włączone, Tydzień 6 będzie miał efekt perfekcyjnych pikseli, ustawiający każdy piksel na ekranie.</str>
 
 		<str id="gameplayShaders-name">Shadery Rozgrywki</str>
-		<str id="gameplayShaders-desc">Jeśli wyłączone, Shadery Rozgrywki (efekty wizualne jak Aberacja Chromatyczna z Thorns) nie będą ładowane; może być pomocne na słabszych urządzeniach.</str>
+		<str id="gameplayShaders-desc">Jeśli wyłączone, Shadery Rozgrywki (efekty wizualne jak Aberacja Chromatyczna z Thorns) nie będą ładowane; może być to pomocne na słabszych urządzeniach.</str>
 
 		<str id="flashingMenu-name">Migające Menu</str>
 		<str id="flashingMenu-desc">Jeśli wyłączone, tło menu głównego nie będzie migać kolorów po wybraniu opcji. Inne migania będą znacznie wolniejsze.</str>
 
-		<str id="lowMemoryMode-name">Słaba Pamięć</str>
+		<str id="lowMemoryMode-name">Niskie zużycie pamięci</str>
 		<str id="lowMemoryMode-desc">Jeśli włączone, usunie niektóre elementy tła, co użyje mniej pamięci.</str>
 
 		<str id="gpuOnlyBitmaps-name">Sprite'y w VRAM</str>
@@ -85,11 +85,11 @@
 	</group>
 
 	<group name="GameplayOptions" prefix="GameplayOptions.">
-		<str id="downscroll-name">Dolne Przewijanie</str>
-		<str id="downscroll-desc">Jeśli włączone, nuty będą spadać w dół zamiast w górę.</str>
+		<str id="downscroll-name">Przewijanie w dół</str>
+		<str id="downscroll-desc">Jeśli włączone, nuty będą spadać w dół zamiast lecieć w górę.</str>
 
 		<str id="ghostTapping-name">Wolne stukanie</str>
-		<str id="ghostTapping-desc">Jeśli wyłączone, próba kliknięcia struny która nie ma nuty odda chybienie.</str>
+		<str id="ghostTapping-desc">Jeśli wyłączone, próba kliknięcia struny która nie ma nuty sprawi chybienie.</str>
 
 		<str id="naughtyness-name">Niegrzeczność</str>
 		<str id="naughtyness-desc">Jeśli wyłączone, cenzuruje scenki 7 Tygodnia.</str>
@@ -111,10 +111,10 @@
 			<str id="windowSize-desc">...</str>
 
 			<str id="streamedMusic-name">Strumieniowana Muzyka</str>
-			<str id="streamedMusic-desc">Jeśli włączone, tylko muzyka będzie strumieniować audio, uwalniając więcej pamięci, na możliwy koszt większego użytku CPU. (EKSPERYMENTALNE)</str>
+			<str id="streamedMusic-desc">Jeśli włączone, tylko muzyka będzie strumieniować audio, uwalniając więcej pamięci, na możliwy koszt większego użycia CPU. (EKSPERYMENTALNE)</str>
 If checked, only musics will have streamed audio, ALSO freeing a LOT of memory with the downside of higher cpu usage if more audio are being streamed at once (EXPERIMENTAL). Turning this off will consume a lot of memory, especially on longer songs. If you aren't sure, leave this on.			
 			<str id="streamedVocals-name">Strumieniowane Wokale</str>
-			<str id="streamedVocals-desc">Jeśli włączone, tylko wokale będą strumieniować audio, uwalniając więcej pamięci, na możliwy koszt większego użytku CPU. (EKSPERYMENTALNE)</str>
+			<str id="streamedVocals-desc">Jeśli włączone, tylko wokale będą strumieniować audio, uwalniając więcej pamięci, na możliwy koszt większego użycia CPU. (EKSPERYMENTALNE)</str>
 		</group>
 	</group>
 
@@ -131,11 +131,11 @@ If checked, only musics will have streamed audio, ALSO freeing a LOT of memory w
 		<str id="betaUpdates-desc">Jeśli włączone, uwzględni nocne budowy gry przy sprawdzaniu aktualizacji.</str>
 
 		<str id="checkForUpdates-name">Sprawdź Aktualizacje</str>
-		<str id="checkForUpdates-desc">Wybierz by szukać nowych aktualizacji silnika.</str>
+		<str id="checkForUpdates-desc">Wybierz by sprawdzić czy nie ma nowszej wersji silnika.</str>
 		<str id="checkForUpdates-noUpdateFound">Nie znaleziono aktualizacji.</str>
 
 		<str id="devMode-name">Tryb Dewelopera</str>
-		<str id="devMode-desc">Jeśli włączone, otrzymasz dostęp do funkcji deweloperskich, na przykład więcej klawiszy, edytory, konsola, itd.</str>
+		<str id="devMode-desc">Jeśli włączone, otrzymasz dostęp do funkcji deweloperskich, na przykład niektóre skróty klawiszowe, edytory, konsola, itd.</str>
 		
 		<str id="resetSaveData-name">Usuń Zapis Gry</str>
 		<str id="resetSaveData-desc">Wybierz aby usunąć zapis gry. To usunie wszystkie twoje wyniki.</str>
@@ -149,10 +149,10 @@ If checked, only musics will have streamed audio, ALSO freeing a LOT of memory w
 		<str id="showConsole-desc">Wybierz aby pokazać konsolę gry, która pokazuje zapisy debugowe. (tylko po angielsku.)</str>
 
 		<str id="editorsResizable-name">Zmienny Rozmiar Edytorów</str>
-		<str id="editorsResizable-desc">Jeśli włączone, pozwoli edytorom na renderowanie poza bazową rezolucją 1280x720 oryginalnej gry, pozwalając na więcej detali i miejsca.</str>
+		<str id="editorsResizable-desc">Jeśli włączone, pozwoli edytorom na renderowanie poza bazową rozdzielczością 1280x720 oryginalnej gry, pozwalając na więcej detali i miejsca.</str>
 		
 		<str id="bypassEditorsResize-name">Objedź Zmienny Rozmiar</str>
-		<str id="bypassEditorsResize-desc">Wyłącza minimalną rezolucję rozmiaru edytorów (Wymaga aby opcja "Zmienny Rozmiar Edytorów" była włączona).</str>
+		<str id="bypassEditorsResize-desc">Pozwala obejść minimalną rodzielczość edytorów (Wymaga aby opcja "Zmienny Rozmiar Edytorów" była włączona).</str>
 		
 		<str id="editorSFX-name">Dźwięki Edytorów</str>
 		<str id="editorSFX-desc">Jeśli włączone, niektóre elementy edytorów będą grać dźwięki. (Na przykład: dźwięki pól wyboru...)</str>
@@ -163,8 +163,8 @@ If checked, only musics will have streamed audio, ALSO freeing a LOT of memory w
 		<str id="intensiveBlur-name">Mocniejszy Rozmaz</str>
 		<str id="intensiveBlur-desc">Jeśli włączone, gra użyje mocniejszego rozmazu, który kosztuje wydajność, ale wygląda lepiej.</str>
 
-		<str id="charterAutoSaves-name">Autozapisy Edytora</str>
-		<str id="charterAutoSaves-desc">Jeśli włączone, edytor automatycznie zapisze twój plik, z poniższymi opcjami.</str>
+		<str id="charterAutoSaves-name">Autozapisy Edytorów</str>
+		<str id="charterAutoSaves-desc">Jeśli włączone, edytory automatycznie będą zapisywać twój progres, używając poniższych opcji.</str>
 
 		<str id="charterAutoSaveTime-name">Częstość Autozapisu</str>
 		<str id="charterAutoSaveTime-desc">Kontroluje co jaki czas edytor będzie automatycznie zapisywać. (w sekundach...)</str>
