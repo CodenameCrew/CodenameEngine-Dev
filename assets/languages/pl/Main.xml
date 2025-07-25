@@ -20,7 +20,7 @@
 
 	<group name="StoryMenu">
 		<str id="story.score">WYNIK TYGODNIA:{0}</str>
-		<str id="story.tracks">ŚCIEŻKI</str>
+		<str id="story.tracks">PIOSENKI</str>
 	</group>
 
 	<group name="Freeplay">
@@ -34,7 +34,7 @@
 	<group name="Pause">
 		<group name="PauseOptions">
 			<str id="pause.resume">Wznów</str>
-			<str id="pause.restartSong">Powtórz Scieżkę</str>
+			<str id="pause.restartSong">Powtórz Piosenkę</str>
 			<str id="pause.changeControls">Zmień Klawisze</str>
 			<str id="pause.changeOptions">Zmień Ustawienia</str>
 			<str id="pause.exitToMenu">Wyjdź do Menu</str>
@@ -69,13 +69,13 @@
 	</group>
 
 	<group name="MainMenu">
-		<str id="mainMenu.commit">Popełnięcie: {0} ({1})</str>
+		<str id="mainMenu.commit">Udział: {0} ({1})</str>
 		<str id="mainMenu.openMods">[{0}] Otwórz menu modów</str>
 	</group>
 
 	<group name="BetaWarning">
 		<str id="betaWarning.title">OSTRZEŻENIE</str>
-		<str id="betaWarning.desc">Ten Silnik nadal jest w fazie *{0}*. To oznacza że *większość funkcji* ma *błędy* lub są *nie dokończone*. Jeśli znajdziesz jakiekolwiek błędy, zgłoś to do Github'a silnika Codename. Proszę być uprzedzonym iż większość członków rozmawia tylko w języku angielskim.</str>
+		<str id="betaWarning.desc">Ten Silnik nadal jest w fazie *{0}*. To oznacza że *większość funkcji* ma *błędy* lub jest *nie dokończone*. Jeśli znajdziesz jakiekolwiek błędy, zgłoś to na Github'ie silnika Codename. Proszę być uprzedzonym iż większość członków rozmawia tylko w języku angielskim.</str>
 		<str id="betaWarning.proceed">Naciśnij {0} aby kontynuować</str>
 	</group>
 
