@@ -41,12 +41,12 @@
 
 	<group name="ChartEditor">
 		<group name="CharterSelection" prefix="charterSelection.">
-			<str id="desc">Wybierz mapę ścieżki do edytowania."</str>
+			<str id="desc">Wybierz mapę piosenki do edytowania."</str>
 			<str id="acceptSong">Naciśnij AKCEPTUJ aby wybrać trudność do edytowania.</str>
 			<str id="acceptDifficulty">Naciśnij AKCEPTUJ aby edytować mapę wybranej trudności.</str>
 			<str id="selectDifficulty">Wybierz trudność aby kontynuować.</str>
 			<str id="newDifficulty">Nowa Trudność</str>
-			<str id="newSong">Nowa Ścieżka</str>
+			<str id="newSong">Nowa Piosenka</str>
 		</group>
 
 		<group name="ChartCreationScreen" prefix="chartCreation.">
@@ -60,8 +60,8 @@
 			<str id="strumLine.format">Struma - #{0}</str>
 
 			<group name="Warnings" prefix="warnings.">
-				<str id="song-exists-title">Tworzenie Ścieżki: Błąd!</str>
-				<str id="song-exists-body">Ścieżka którą próbujesz utworzyć już istnieje, jeśli chcesz nadpisać ścieżkę, najpierw ją usuń!</str>
+				<str id="song-exists-title">Tworzenie Piosenki: Błąd!</str>
+				<str id="song-exists-body">Piosenka którą próbujesz utworzyć już istnieje, jeśli chcesz nadpisać piosenkę, najpierw ją usuń!</str>
 				<str id="chart-exists-title">Tworzenie Mapy: Błąd!</str>
 				<str id="chart-exists-body">Mapa którą próbujesz utworzyć już istnieje, jeśli chcesz nadpisać mapę, najpierw ją usuń!</str>
 			</group>
