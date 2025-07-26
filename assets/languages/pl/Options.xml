@@ -157,9 +157,6 @@ If checked, only musics will have streamed audio, ALSO freeing a LOT of memory w
 		<str id="editorSFX-name">Dźwięki Edytorów</str>
 		<str id="editorSFX-desc">Jeśli włączone, niektóre elementy edytorów będą grać dźwięki. (Na przykład: dźwięki pól wyboru...)</str>
 
-		<str id="editorPrettyPrint-name">Ładny Druk</str>
-		<str id="editorPrettyPrint-desc">Jeśli włączone, zapisane pliki z edytorów będą używać formatowania łatwiejszego do odczytania. (opcja nie dotyczy plików xml, tylko po angielsku...)</str>
-
 		<str id="intensiveBlur-name">Mocniejszy Rozmaz</str>
 		<str id="intensiveBlur-desc">Jeśli włączone, gra użyje mocniejszego rozmazu, który kosztuje wydajność, ale wygląda lepiej.</str>
 

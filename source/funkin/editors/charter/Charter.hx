@@ -789,9 +789,9 @@ class Charter extends UIState {
 				var songPath:String = '${Paths.getAssetsRoot()}/songs/${__song.toLowerCase()}';
 
 				if (Options.charterAutoSavesSeparateFolder)
-					Chart.save(songPath, PlayState.SONG, __autoSaveLocation, {saveMetaInChart: true, saveLocalEvents: true, saveGlobalEvents: true, folder: "autosaves", prettyPrint: Options.editorPrettyPrint});
+					Chart.save(songPath, PlayState.SONG, __autoSaveLocation, {saveMetaInChart: true, saveLocalEvents: true, saveGlobalEvents: true, folder: "autosaves", prettyPrint: Options.editorCharterPrettyPrint});
 				else  // These two chart saves are particular, to avoid any kind of loss, stuff like meta, global and local events will be save all together  - Nex
-					Chart.save(songPath, PlayState.SONG, __diff.toLowerCase(), {saveMetaInChart: true, saveLocalEvents: true, saveGlobalEvents: true, prettyPrint: Options.editorPrettyPrint});
+					Chart.save(songPath, PlayState.SONG, __diff.toLowerCase(), {saveMetaInChart: true, saveLocalEvents: true, saveGlobalEvents: true, prettyPrint: Options.editorCharterPrettyPrint});
 				undos.save();
 			}
 			autoSaveNotif.cancelled = false;
@@ -1483,7 +1483,7 @@ class Charter extends UIState {
 	}
 
 	public static function saveChartAs(shouldBuild:Bool = true, withEvents:Bool = true) {
-		saveAs(Chart.filterChartForSaving(PlayState.SONG, false, withEvents, false), null, Options.editorPrettyPrint ? Flags.JSON_PRETTY_PRINT : null, {
+		saveAs(Chart.filterChartForSaving(PlayState.SONG, false, withEvents, false), null, Options.editorCharterPrettyPrint ? Flags.JSON_PRETTY_PRINT : null, {
 			defaultSaveFile: '${__diff.toLowerCase()}.json'
 		}, null, shouldBuild);
 		if (undos != null) undos.save();
@@ -1496,7 +1496,7 @@ class Charter extends UIState {
 		var data = {events: Chart.filterChartForSaving(PlayState.SONG, false, false, true).events};
 
 		var path = '${Paths.getAssetsRoot()}/songs/${__song.toLowerCase()}/events.json';
-		if (data.events != null && data.events.length > 0) CoolUtil.safeSaveFile(path, Json.stringify(data, null, Options.editorPrettyPrint ? Flags.JSON_PRETTY_PRINT : null));
+		if (data.events != null && data.events.length > 0) CoolUtil.safeSaveFile(path, Json.stringify(data, null, Options.editorCharterPrettyPrint ? Flags.JSON_PRETTY_PRINT : null));
 		else if (FileSystem.exists(path)) FileSystem.deleteFile(path);  // Instead of replacing with a useless empty file, deletes the file directly  - Nex
 		#else
 		saveEventsAs(shouldBuild);
@@ -1507,7 +1507,7 @@ class Charter extends UIState {
 		if (shouldBuild && instance != null) instance.buildChart();
 		var data = {events: Chart.filterChartForSaving(PlayState.SONG, false, false, true).events};
 
-		saveAs(data, null, Options.editorPrettyPrint ? Flags.JSON_PRETTY_PRINT : null, {
+		saveAs(data, null, Options.editorCharterPrettyPrint ? Flags.JSON_PRETTY_PRINT : null, {
 			defaultSaveFile: 'events.json'
 		}, null, false);
 	}
@@ -1532,13 +1532,13 @@ class Charter extends UIState {
 	}
 
 	public static function saveLegacyChartAs(shouldBuild:Bool = true) {
-		saveAs(FNFLegacyParser.encode(PlayState.SONG), null, Options.editorPrettyPrint ? Flags.JSON_PRETTY_PRINT : null, {
+		saveAs(FNFLegacyParser.encode(PlayState.SONG), null, Options.editorCharterPrettyPrint ? Flags.JSON_PRETTY_PRINT : null, {
 			defaultSaveFile: '${__song.toLowerCase().replace(" ", "-")}${__diff.toLowerCase() == Flags.DEFAULT_DIFFICULTY ? "" : '-${__diff.toLowerCase()}'}.json',
 		}, null, shouldBuild);
 	}
 
 	public static function savePsychChartAs(shouldBuild:Bool = true) {
-		saveAs(PsychParser.encode(PlayState.SONG), null, Options.editorPrettyPrint ? Flags.JSON_PRETTY_PRINT : null, {
+		saveAs(PsychParser.encode(PlayState.SONG), null, Options.editorCharterPrettyPrint ? Flags.JSON_PRETTY_PRINT : null, {
 			defaultSaveFile: '${__song.toLowerCase().replace(" ", "-")}${__diff.toLowerCase() == Flags.DEFAULT_DIFFICULTY ? "" : '-${__diff.toLowerCase()}'}.json',
 		}, null, shouldBuild);
 	}
@@ -1556,7 +1556,7 @@ class Charter extends UIState {
 	#if sys
 	public static function saveTo(path:String, separateEvents:Bool = false, shouldBuild:Bool = true) {
 		if (shouldBuild && instance != null) instance.buildChart();
-		Chart.save(path, PlayState.SONG, __diff.toLowerCase(), {saveMetaInChart: false, saveLocalEvents: !separateEvents, prettyPrint: Options.editorPrettyPrint});
+		Chart.save(path, PlayState.SONG, __diff.toLowerCase(), {saveMetaInChart: false, saveLocalEvents: !separateEvents, prettyPrint: Options.editorCharterPrettyPrint});
 	}
 	#end
 	#end

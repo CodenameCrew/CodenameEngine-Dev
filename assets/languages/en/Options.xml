@@ -157,8 +157,14 @@
 		<str id="editorSFX-name">Editor SFXs</str>
 		<str id="editorSFX-desc">If checked, will play sound effects when working on editors (ex: will play sfxs when checking checkboxes...)</str>
 
-		<str id="editorPrettyPrint-name">Pretty Print</str>
-		<str id="editorPrettyPrint-desc">If checked, the saved files from the editor will be formatted to be easily viewable (does not apply to xmls...)</str>
+		<str id="editorCharterPrettyPrint-name">Chart Pretty Print</str>
+		<str id="editorCharterPrettyPrint-desc">If checked, the saved files from the chart editor will be formatted to be easily viewable</str>
+
+		<str id="editorCharacterPrettyPrint-name">Character Pretty Print</str>
+		<str id="editorCharacterPrettyPrint-desc">If checked, the saved files from the character editor will be formatted to be easily viewable</str>
+
+		<str id="editorStagePrettyPrint-name">Stage Pretty Print</str>
+		<str id="editorStagePrettyPrint-desc">If checked, the saved files from the stage editor will be formatted to be easily viewable</str>
 
 		<str id="intensiveBlur-name">Intensive Blur</str>
 		<str id="intensiveBlur-desc">If checked, will use more intensive blur that may be laggier but look better.</str>

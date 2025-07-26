@@ -42,10 +42,20 @@ class OptionsMenu extends TreeMenu {
 			desc: 'optionsTree.miscellaneous-desc',
 			suffix: " >",
 			state: MiscOptions
+		},
+		{
+			name: "Debug Options",
+			desc: "debugOptions",
+			suffix: " >",
+			state: DebugOptions
 		}
 	];
 
 	var bg:FlxSprite;
+
+	var addedDebugOptions:Bool = !Options.devMode;
+	var debugModeButton:OptionType;
+	var debugModeIndex:Int = mainOptions.length - 1;
 
 	public override function create() {
 		super.create();
@@ -99,6 +109,12 @@ class OptionsMenu extends TreeMenu {
 				if (access != null) for (o in parseOptionsFromXML(access)) main.add(o);
 			}
 		}
+
+		doDebugOptionThing();
+	}
+
+	public override function onMenuClose(m:OptionsScreen) {
+		doDebugOptionThing();
 	}
 
 	public function reloadStrings() {
@@ -113,6 +129,18 @@ class OptionsMenu extends TreeMenu {
 		Options.save();
 		Options.applySettings();
 		super.exit();
+	}
+
+	function doDebugOptionThing() {
+		if ((Options.devMode && !addedDebugOptions) || (!Options.devMode && addedDebugOptions)) {
+			trace((addedDebugOptions ? "remove" : "add") + " option");
+			addedDebugOptions = !addedDebugOptions;
+			if (debugModeButton == null) debugModeButton = main.members[debugModeIndex];
+			if (addedDebugOptions)
+				main.add(debugModeButton);
+			else
+				main.remove(debugModeButton);
+		}
 	}
 
 	/**

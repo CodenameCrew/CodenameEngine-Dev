@@ -9,11 +9,6 @@ class EditorPicker extends MusicBeatSubstate {
 	// Name is for backwards compatibility, don't use it, use id instead
 	public var options:Array<Editor> = [
 		{
-			name: "Alphabet Editor",
-			id: "alphabet",
-			state: funkin.editors.alphabet.AlphabetSelection
-		},
-		{
 			name: "Chart Editor",
 			id: "chart",
 			state: funkin.editors.charter.CharterSelection
@@ -27,6 +22,11 @@ class EditorPicker extends MusicBeatSubstate {
 			name: "Stage Editor",
 			id: "stage",
 			state: funkin.editors.stage.StageSelection
+		},
+		{
+			name: "Alphabet Editor",
+			id: "alphabet",
+			state: funkin.editors.alphabet.AlphabetSelection
 		},
 		#if (debug || debug_ui)
 		{
@@ -42,11 +42,6 @@ class EditorPicker extends MusicBeatSubstate {
 			onClick: function() {
 				CoolUtil.openURL(Flags.URL_WIKI);
 			}
-		},
-		{
-			name: "Debug Options",
-			id: "debugOptions",
-			state: DebugOptions
 		}
 	];
 

@@ -1,41 +1,15 @@
-package funkin.editors;
+package funkin.options.categories;
 
 import funkin.backend.utils.NativeAPI;
-import funkin.options.OptionsScreen;
-import funkin.options.TreeMenu;
-import funkin.options.type.*;
 
-class DebugOptions extends TreeMenu {
-	public override function create() {
-		super.create();
+class DebugOptions extends OptionsScreen {
+	public override function new(title:String, desc:String) {
+		super(title, desc, "DebugOptions.");
 
-		FlxG.camera.fade(0xFF000000, 0.5, true);
-
-		var bg:FlxSprite = new FlxSprite(-80).loadAnimatedGraphic(Paths.image('menus/menuBGBlue'));
-		// bg.scrollFactor.set();
-		bg.scale.set(1.15, 1.15);
-		bg.updateHitbox();
-		bg.screenCenter();
-		bg.scrollFactor.set();
-		bg.antialiasing = true;
-		add(bg);
-
-		main = new DebugOptionsScreen();
-	}
-}
-
-class DebugOptionsScreen extends OptionsScreen {
-	public override function new() {
-		prefix = "DebugOptions.";
-		super(translate("title"), translate("desc"), prefix);
-		#if windows
 		add(new TextOption(
 			getName("showConsole"),
 			getDesc("showConsole"),
-			function() {
-				NativeAPI.allocConsole();
-			}));
-		#end
+			function() NativeAPI.allocConsole()));
 		add(new Checkbox(
 			getName("editorsResizable"),
 			getDesc("editorsResizable"),
@@ -49,9 +23,17 @@ class DebugOptionsScreen extends OptionsScreen {
 			getDesc("editorSFX"),
 			"editorSFX"));
 		add(new Checkbox(
-			getName("editorPrettyPrint"),
-			getDesc("editorPrettyPrint"),
-			"editorPrettyPrint"));
+			getName("editorCharterPrettyPrint"),
+			getDesc("editorCharterPrettyPrint"),
+			"editorCharterPrettyPrint"));
+		add(new Checkbox(
+			getName("editorCharacterPrettyPrint"),
+			getDesc("editorCharacterPrettyPrint"),
+			"editorCharacterPrettyPrint"));
+		add(new Checkbox(
+			getName("editorStagePrettyPrint"),
+			getDesc("editorStagePrettyPrint"),
+			"editorStagePrettyPrint"));
 		add(new Checkbox(
 			getName("intensiveBlur"),
 			getDesc("intensiveBlur"),

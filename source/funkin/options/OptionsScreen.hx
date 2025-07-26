@@ -113,6 +113,10 @@ class OptionsScreen extends FlxTypedSpriteGroup<OptionType> {
 
 		CoolUtil.playMenuSFX(SCROLL);
 		curSelected = FlxMath.wrap(curSelected + sel, 0, members.length-1);
+		if (members[curSelected] == null) {
+			changeSelection(sel, true);
+			return;
+		}
 		members[curSelected].selected = true;
 		updateMenuDesc();
 	}

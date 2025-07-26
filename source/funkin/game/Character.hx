@@ -429,12 +429,12 @@ class Character extends FunkinSprite implements IBeatReceiver implements IOffset
 
 		var realFlipped:Bool = isPlayer ? !__baseFlipped : __baseFlipped;
 		if (realFlipped) xml.set("flipX", "true");
-		xml.set("icon", getIcon());
+		if (icon != curCharacter) xml.set("icon", getIcon());
 
 		if (gameOverCharacter != Character.FALLBACK_DEAD_CHARACTER) xml.set("gameOverChar", gameOverCharacter);
 		if (iconColor != null) xml.set("color", iconColor.toWebString());
 
-		xml.set("sprite", sprite);
+		if (sprite != curCharacter) xml.set("sprite", sprite);
 		if (scale.x != 1) xml.set("scale", Std.string(FlxMath.roundDecimal(scale.x, 4)));
 		if (!antialiasing) xml.set("antialiasing", antialiasing == true ? "true" : "false");
 
@@ -453,12 +453,12 @@ class Character extends FunkinSprite implements IBeatReceiver implements IOffset
 
 			animXml.set("name", anim.name);
 			animXml.set("anim", anim.anim);
-			animXml.set("loop", Std.string(anim.loop));
-			animXml.set("fps", Std.string(FlxMath.roundDecimal(anim.fps, 2)));
+			if (anim.loop) animXml.set("loop", Std.string(anim.loop));
+			if (FlxMath.roundDecimal(anim.fps, 2) != 24) animXml.set("fps", Std.string(FlxMath.roundDecimal(anim.fps, 2)));
 
 			var offset:FlxPoint = getAnimOffset(anim.name);
-			animXml.set("x", Std.string(FlxMath.roundDecimal(offset.x, 2)));
-			animXml.set("y", Std.string(FlxMath.roundDecimal(offset.y, 2)));
+			if (FlxMath.roundDecimal(offset.x, 2) != 0) animXml.set("x", Std.string(FlxMath.roundDecimal(offset.x, 2)));
+			if (FlxMath.roundDecimal(offset.y, 2) != 0) animXml.set("y", Std.string(FlxMath.roundDecimal(offset.y, 2)));
 			offset.putWeak();
 
 			if (anim.indices.length > 0)
@@ -474,6 +474,7 @@ class Character extends FunkinSprite implements IBeatReceiver implements IOffset
 			}
 
 		this.xml = new Access(xml);
+
 		return xml;
 	}
 

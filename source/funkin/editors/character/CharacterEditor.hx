@@ -486,7 +486,8 @@ class CharacterEditor extends UIState {
 				button.anim
 		]);
 
-		return "<!DOCTYPE codename-engine-character>\n" + Printer.print(charXML, true);
+		var xmlThingYea:String = "<!DOCTYPE codename-engine-character>\n" + Printer.print(charXML, Options.editorCharacterPrettyPrint);
+		return Options.editorCharacterPrettyPrint ? xmlThingYea : xmlThingYea.replace("\n", "");
 	}
 
 	var clipboard:FlxPoint = FlxPoint.get();

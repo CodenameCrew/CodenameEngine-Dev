@@ -726,8 +726,8 @@ class StageEditor extends UIState {
 			}
 		}
 
-		var xmlThingYea:String = "<!DOCTYPE codename-engine-stage>\n" + Printer.print(xml, Options.editorPrettyPrint);
-		return Options.editorPrettyPrint ? xmlThingYea : xmlThingYea.replace("\n", "");
+		var xmlThingYea:String = "<!DOCTYPE codename-engine-stage>\n" + Printer.print(xml, Options.editorStagePrettyPrint);
+		return Options.editorStagePrettyPrint ? xmlThingYea : xmlThingYea.replace("\n", "");
 	}
 
 	function _edit_undo(_) {
