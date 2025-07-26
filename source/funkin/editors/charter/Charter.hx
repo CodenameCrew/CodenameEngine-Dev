@@ -1853,6 +1853,34 @@ class Charter extends UIState {
 		return bookmarks;
 	}
 
+		function _opponent_camera_add(_) {
+		var __event:CharterEvent = null;
+
+				__event = new CharterEvent(curStepFloat, [{
+				name: "Camera Movement",
+				params:[0],
+				time: Conductor.getTimeForStep(curStepFloat)
+			}], true);
+				__event.refreshEventIcons();
+				__event.global = true;
+				rightEventsGroup.add(__event);
+				undos.addToUndo(CEditEvent(__event, [], __event.events));
+			
+	}
+		function _player_camera_add(_) {
+		var __event:CharterEvent = null;
+
+				__event = new CharterEvent(curStepFloat, [{
+				name: "Camera Movement",
+				params:[1],
+				time: Conductor.getTimeForStep(curStepFloat)
+			}], true);
+				__event.refreshEventIcons();
+				rightEventsGroup.add(__event);
+				undos.addToUndo(CEditEvent(__event, [], __event.events));
+			
+	}
+
 	function _bookmarks_add(_) {
 		var addBookmarkAt = function(name:String, color:FlxColor, daStep:Float)
 		{
@@ -1963,6 +1991,17 @@ class Charter extends UIState {
 				label: translate("song.goEnd"),
 				keybind: [END],
 				onSelect: _song_end
+			},
+			null,
+			{
+				label: translate("song.addOpponentCamera"),
+				keybind: [Q],
+				onSelect: _opponent_camera_add
+			},
+			{
+				label: translate("song.addPlayerCamera"),
+				keybind: [E],
+				onSelect: _player_camera_add
 			},
 			null,
 			{
