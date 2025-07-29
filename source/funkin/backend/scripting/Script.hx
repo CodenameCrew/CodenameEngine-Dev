@@ -112,9 +112,9 @@ class Script extends FlxBasic implements IFlxDestroyable {
 	 * if you wanna modify it, please edit `hscript.Interp.importRedirects` directly.
 	**/
 	public static function getDefaultImportRedirects():Map<String, String> {
-		var redirects:Map<String, String> = [
-		];
+		var redirects:Map<String, String> = [];
 
+		// Events
 		final events = "funkin.backend.scripting.events.";
 		redirects[events + "CharacterNodeEvent"]			= events + "character.CharacterNodeEvent";
 		redirects[events + "CharacterXMLEvent"]				= events + "character.CharacterXMLEvent";
@@ -145,6 +145,9 @@ class Script extends FlxBasic implements IFlxDestroyable {
 		redirects[events + "PlayAnimEvent"]					= events + "sprite.PlayAnimEvent";
 		redirects[events + "StageNodeEvent"]				= events + "stage.StageNodeEvent";
 		redirects[events + "StageXMLEvent"]					= events + "stage.StageXMLEvent";
+
+		// Old State Names
+		redirects["funkin.menus.BetaWarningState"] 			= "funkin.menus.WarningState";
 
 		return redirects;
 	}
