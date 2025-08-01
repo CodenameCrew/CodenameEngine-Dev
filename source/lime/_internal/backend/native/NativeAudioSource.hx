@@ -20,6 +20,7 @@ import lime.utils.ArrayBufferView;
 
 #if native_audio_experimental_stream_async
 import sys.thread.Thread;
+import sys.thread.Mutex;
 #end
 
 #if !lime_debug
@@ -40,6 +41,7 @@ class NativeAudioSource {
 	private static var requestStreamSources:Array<Dynamic> = []; // NativeAudioSource, Int
 	private static var lengthStreamSources:Int = 0;
 
+	private static var streamMutex:Mutex = new Mutex();
 	private static var streamHandlerTimer:Timer;
 	private static var streamThread:Thread;
 	#end
@@ -266,6 +268,10 @@ class NativeAudioSource {
 
 	private function queueBuffers(n:Int) {
 		var i = STREAM_MAX_BUFFERS - n, buffer;
+		if (n > unusedBuffers.length) {
+			n = unusedBuffers.length;
+			trace('weird', n, unusedBuffers.length);
+		}
 		while (n-- > 0) {
 			AL.bufferData(buffer = unusedBuffers.pop(), format, bufferDatas[i], bufferSizes[i], parent.buffer.sampleRate);
 			AL.sourceQueueBuffer(handle, buffer);
@@ -312,8 +318,10 @@ class NativeAudioSource {
 				}
 
 				if (j > 0) {
+					streamMutex.acquire();
 					requestStreamSources.push(source);
 					requestStreamSources.push(j);
+					streamMutex.release();
 				}
 			}
 			catch (e:haxe.Exception) trace('NativeAudioSource Bug! in sourceStreamThread', e.stack, e);
@@ -327,21 +335,26 @@ class NativeAudioSource {
 	private static function sourceStreamHandler():Void {
 		var i = lengthStreamSources, source:NativeAudioSource;
 
-		while (i-- > 0) {
-			if ((source = streamSources[i]).parent == null || source.parent.buffer == null || source.handle == null) source.dispose();
-			else if (!source.playing || source.disposed) source.stopStreamTimer();
-			else source.processBuffers();
-		}
-
-		while ((source = requestStreamSources.shift()) != null) {
-			source.queueBuffers(requestStreamSources.shift());
-			if (AL.getSourcei(source.handle, AL.SOURCE_STATE) == AL.STOPPED) {
-				AL.sourcePlay(source.handle);
-				source.resetTimer((source.getLength() - source.getCurrentTime()) / source.getPitch());
+		try {
+			streamMutex.acquire();
+			while (i-- > 0) {
+				if ((source = streamSources[i]).parent == null || source.parent.buffer == null || source.handle == null) source.dispose();
+				else if (!source.playing || source.disposed) source.stopStreamTimer();
+				else source.processBuffers();
 			}
-		}
 
-		streamThread.sendMessage(0);
+			while ((source = requestStreamSources.shift()) != null) {
+				source.queueBuffers(requestStreamSources.shift());
+				if (AL.getSourcei(source.handle, AL.SOURCE_STATE) == AL.STOPPED) {
+					AL.sourcePlay(source.handle);
+					source.resetTimer((source.getLength() - source.getCurrentTime()) / source.getPitch());
+				}
+			}
+			streamMutex.release();
+
+			streamThread.sendMessage(0);
+		}
+		catch (e:haxe.Exception) trace('NativeAudioSource Bug! in sourceStreamHandler', e.stack, e);
 	}
 
 	private function stopStreamTimer():Void {
