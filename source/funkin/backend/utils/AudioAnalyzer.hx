@@ -462,7 +462,7 @@ class AudioAnalyzer {
 
 	#if lime_cffi
 	inline function __canReadStream():Bool
-		@:privateAccess return sound._source != null && sound._source.__backend != null && sound._source.__backend.streamTimer != null;
+		@:privateAccess return sound._source != null && sound._source.__backend != null && sound._source.__backend.playing;
 
 	inline function __readStream(startPos:Float, endPos:Float, callback:AudioAnalyzerCallback):Float @:privateAccess {
 		var backend = sound._source.__backend;
